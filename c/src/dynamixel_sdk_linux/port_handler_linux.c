@@ -148,7 +148,8 @@ uint8_t setBaudRateLinux(int port_num, const int baudrate)
 
   if (baud <= 0)   // custom baudrate
   {
-    setupPortLinux(port_num, B38400);
+    // AKK 3/24/2017: modifying per the template provided by modifed dxl_hal driver @ https://raw.githubusercontent.com/Xevel/usb2ax/master/pc_software/usb2ax_DynamixelSDK/linux_compatibility/dxl_hal.c
+    setupPortLinux(port_num, B1000000);
     portData[port_num].baudrate = baudrate;
     return setCustomBaudrateLinux(port_num, baudrate);
   }
@@ -252,6 +253,8 @@ uint8_t setupPortLinux(int port_num, int cflag_baud)
 
 uint8_t setCustomBaudrateLinux(int port_num, int speed)
 {
+    // AKK 3/24/2017: modifying per the template provided by modifed dxl_hal driver @ https://raw.githubusercontent.com/Xevel/usb2ax/master/pc_software/usb2ax_DynamixelSDK/linux_compatibility/dxl_hal.c
+  /*
   // try to set a custom divisor
   struct serial_struct ss;
   if (ioctl(portData[port_num].socket_fd, TIOCGSERIAL, &ss) != 0)
@@ -277,6 +280,10 @@ uint8_t setCustomBaudrateLinux(int port_num, int speed)
   }
 
   portData[port_num].tx_time_per_byte = (1000.0 / (double)speed) * 10.0;
+  */
+
+  printf("[PortHandlerLinux::setCustomBaudrate] these settings do not exist for CDC ACM  driver, baud rate not changed\n");
+
   return True;
 }
 
